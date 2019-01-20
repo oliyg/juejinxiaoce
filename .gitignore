@@ -84,6 +84,8 @@ typings/
 
 # dist
 dist/html/*.html
+dist/md/*.md
 
 # chrome
 chrome-win/
+

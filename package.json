@@ -5,12 +5,18 @@
   "main": "index.js",
   "scripts": {
     "install_puppeteer": "npm i -S puppeteer --ignore-script",
-    "start": "node app.js && clear && ls"
+    "start": "node app.js && node converter.js"
   },
   "keywords": [],
   "author": "OliverYoung <billyangg@qq.com>",
   "license": "MIT",
   "dependencies": {
-    "puppeteer": "^1.11.0"
+    "delete": "^1.1.0",
+    "dotenv": "^6.2.0",
+    "puppeteer": "^1.11.0",
+    "turndown": "^5.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.1"
   }
 }
