@@ -31,7 +31,19 @@
 
 最后项目目录如下：
 
-![20190120235001.png](https://i.loli.net/2019/01/20/5c4498aad2302.png)
+```
+├── CODE_OF_CONDUCT.md
+├── LICENSE
+├── app.js
+├── chrome-mac
+├── constant.js
+├── converter.js
+├── dist
+├── node_modules
+├── package-lock.json
+├── package.json
+└── readme.md
+```
 
 ## 使用方法
 
@@ -51,7 +63,8 @@
 
 ## 免责
 
-- 该项目仅作为技术讨论，学习和研究使用
+- 不提供用户名和密码，需使用用户自己的账号密码登录
+- 仅作为技术讨论，学习和研究使用
 
 ## 隐私
 
