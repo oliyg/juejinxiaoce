@@ -2,6 +2,7 @@
 const fs = require('fs')
 const path = require('path')
 const del = require('delete')
+const os = require('os')
 const turndownInstance = new require('turndown')({
   headingStyle: 'atx',
   codeBlockStyle: 'fenced'
@@ -17,7 +18,7 @@ fs.readdirSync(input_path).forEach(file => {
   if (path.extname(file) === '.html') {
     const data = fs.readFileSync(path.resolve(input_path, file), { encoding: 'utf-8' })
     const markdown = turndownInstance.turndown(data)
-    console.log(`converting ${path.parse(file).name} \n words count: ${markdown.length}`)
+    console.log(`converting ${path.parse(file).name} ${os.EOL} words count: ${markdown.length}`)
     fs.writeFileSync(path.resolve(output_path, path.parse(file).name) + '.md', markdown)
   }
 })
