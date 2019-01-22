@@ -1,6 +1,7 @@
 - [🔥 掘金小册 markdown 转换器](#%F0%9F%94%A5-%E6%8E%98%E9%87%91%E5%B0%8F%E5%86%8C-markdown-%E8%BD%AC%E6%8D%A2%E5%99%A8)
   - [安装方式](#%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F)
   - [使用方法](#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95)
+  - [常见问题](#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
   - [免责](#%E5%85%8D%E8%B4%A3)
   - [隐私](#%E9%9A%90%E7%A7%81)
   - [License](#license)
@@ -27,7 +28,9 @@
 
 [chromium 官网下载](https://download-chromium.appspot.com/)
 
-将 chromium 解压缩，连同 chrome-win 文件夹一同放入项目根目录中去
+> windows 系统，将 chromium 解压缩，连同 `chrome-win` 文件夹一同放入项目根目录中去
+> 
+> macOS 系统，正常安装程序（安装到 `/Applications` 应用程序文件夹）中去，[避免遇到权限问题](https://github.com/GoogleChrome/puppeteer/issues/1649)
 
 最后项目目录如下：
 
@@ -35,7 +38,7 @@
 ├── CODE_OF_CONDUCT.md
 ├── LICENSE
 ├── app.js
-├── chrome-mac
+├── chrome-win
 ├── constant.js
 ├── converter.js
 ├── dist
@@ -60,6 +63,11 @@
 ![20190121000703.png](https://i.loli.net/2019/01/21/5c449ca8d869e.png)
 
 ![20190121000715.png](https://i.loli.net/2019/01/21/5c449cb443d62.png)
+
+## 常见问题
+
+- 报错：spawn EACCES
+  - 常见于 macOS，请保证 chromium 已被正常安装
 
 ## 免责
 

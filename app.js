@@ -15,7 +15,7 @@ const BOOK_ID = process.env.BOOK_ID
 {
   (async () => {
     const browser = await puppeteer.launch({
-      executablePath: os.platform() === 'win32' ? path.join('chrome-win', 'chrome.exe') : path.join('chrome-mac', 'Chromium.app'),
+      executablePath: os.platform() === 'win32' ? path.join(__dirname, path.normalize('chrome-win/chrome.exe')) : '/Applications/Chromium.app/Contents/MacOS/Chromium',
       defaultViewport: {
         width: 1920,
         height: 1080
