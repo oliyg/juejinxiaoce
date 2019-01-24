@@ -4,19 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install_puppeteer": "npm i -S puppeteer --ignore-script",
-    "start": "node app.js && node converter.js"
+    "env": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oliyg/juejinxiaoce.git"
   },
   "keywords": [],
   "author": "OliverYoung <billyangg@qq.com>",
   "license": "MIT",
-  "dependencies": {
-    "delete": "^1.1.0",
-    "dotenv": "^6.2.0",
-    "puppeteer-core": "^1.11.0",
-    "turndown": "^5.0.1"
+  "bugs": {
+    "url": "https://github.com/oliyg/juejinxiaoce/issues"
   },
+  "homepage": "https://github.com/oliyg/juejinxiaoce#readme",
   "devDependencies": {
     "eslint": "^5.12.1"
+  },
+  "dependencies": {
+    "dotenv": "^6.2.0"
   }
 }
