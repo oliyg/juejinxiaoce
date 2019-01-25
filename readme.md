@@ -17,7 +17,7 @@
 
 根据需要选择不同版本，v1 不再维护：
 
-- [release v2](https://github.com/oliyg/juejinxiaoce/releases/tag/2.0.0)
+- [release v2](https://github.com/oliyg/juejinxiaoce/releases/tag/v2.0.0)
 - [release v1](https://github.com/oliyg/juejinxiaoce/releases/tag/1.1.2)
 
 ## 安装方式
