@@ -2,6 +2,8 @@
 require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
+const Turndown = require('turndown')
+
 const { getCookieArr, getCookieObj, sendPost, sendGet, sleep } = require('./utils')
 const { USER_AGENT, URL_HOSTNAME, URL_LOGIN, URL_BOOK_HOSTNAME, URL_BOOK_LIST_SECTION, URL_BOOK_SECTION } = require('./constant')
 
@@ -79,14 +81,30 @@ class Juejin {
     return new Promise((resolve, reject) => {
       console.log('===writing file...')
       const title = d.title.replace(/[/?*:|\\<>]/g, ' ')
-      const output = path.resolve(__dirname, 'dist', 'html')
-      fs.writeFile(path.join(output, title + '.html'), d.html, { encoding: 'utf-8' }, err => {
+      const output = path.resolve(__dirname, 'dist', 'html', title + '.html')
+      fs.writeFile(output, d.html, { encoding: 'utf-8' }, err => {
         err && reject(err)
         console.log('===write file success')
-        resolve()
+        resolve(output)
       })
     })
   }
+
+  toMarkdown(path) {
+    return new Promise((resolve, reject) => {
+      const turndownService = new Turndown({
+        headingStyle: 'atx',
+        codeBlockStyle: 'fenced'
+      })
+      try {
+        const markdown = turndownService.turndown(fs.readFileSync(path, { encoding: 'utf-8' }))
+        resolve(markdown) 
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
 }
 
 {(async () => {
@@ -96,8 +114,10 @@ class Juejin {
     await juejin.login()
     await sleep()
     await juejin.getTargetBookSectionList()
-    await juejin.getContentHTML(d => {
-      juejin.saveHTML(d)
+    await juejin.getContentHTML(async d => {
+      const path = await juejin.saveHTML(d)
+      const md = await juejin.toMarkdown(path)
+      console.log(md.length)
     })
   } catch (error) {
     console.log(error) 
