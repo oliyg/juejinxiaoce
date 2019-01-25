@@ -2,9 +2,9 @@
   "name": "juejinxiaoce",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "env": "nodemon app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
