@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 require('dotenv').config()
 const fs = require('fs')
+const path = require('path')
 const { getCookieArr, getCookieObj, sendPost, sendGet, sleep } = require('./utils')
 const { USER_AGENT, URL_HOSTNAME, URL_LOGIN, URL_BOOK_HOSTNAME, URL_BOOK_LIST_SECTION, URL_BOOK_SECTION } = require('./constant')
 
@@ -59,7 +60,7 @@ class Juejin {
       'User-Agent': USER_AGENT,
       'Connection': 'keep-alive'
     }
-    await sleep()
+    await sleep(3000)
 
     const url = `${URL_BOOK_SECTION}?uid=${this.userInfo.userId}&client_id=${this.userInfo.clientId}&token=${this.userInfo.token}&src=${this.src}&sectionId=${this.bookSectionList[this.count].sectionId}`
     const response = await sendGet(URL_BOOK_HOSTNAME, url, headers)
@@ -67,11 +68,24 @@ class Juejin {
 
     console.log(data.d.title)
     data.d.isFinished || console.log('写作中...')
-    callback(data.d.html)
+    callback(data.d)
 
     this.count ++
     let maxCount = this.bookSectionList.length
     this.count !== maxCount && await this.getContentHTML(callback)
+  }
+
+  saveHTML(d) {
+    return new Promise((resolve, reject) => {
+      console.log('===writing file...')
+      const title = d.title.replace(/[/?*:|\\<>]/g, ' ')
+      const output = path.resolve(__dirname, 'dist', 'html')
+      fs.writeFile(path.join(output, title + '.html'), d.html, { encoding: 'utf-8' }, err => {
+        err && reject(err)
+        console.log('===write file success')
+        resolve()
+      })
+    })
   }
 }
 
@@ -82,7 +96,9 @@ class Juejin {
     await juejin.login()
     await sleep()
     await juejin.getTargetBookSectionList()
-    await juejin.getContentHTML()
+    await juejin.getContentHTML(d => {
+      juejin.saveHTML(d)
+    })
   } catch (error) {
     console.log(error) 
   }
