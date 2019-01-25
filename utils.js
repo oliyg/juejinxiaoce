@@ -13,8 +13,8 @@ function sendGet(hostname, path, headers) {
     const req = https.request({
       hostname, port: 443, path, method: 'GET'
     }, res => {
-      const data = []
-      res.on('data', chunk => { data.push(chunk) })
+      let data = ''
+      res.on('data', chunk => { data = data + chunk.toString() })
       res.on('error', reject)
       res.on('end', () => {
         resolve({
@@ -34,8 +34,8 @@ function sendPost(hostname, path, data, headers) {
     const req = https.request({
       hostname, path, port: 443, method: 'POST'
     }, res => {
-      const data = []
-      res.on('data', chunk => { data.push(chunk) })
+      let data = ''
+      res.on('data', chunk => { data = data + chunk.toString() })
       res.on('end', () => { resolve({
         res,
         data

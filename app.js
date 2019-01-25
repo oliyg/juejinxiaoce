@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 require('dotenv').config()
+const fs = require('fs')
 const { getCookieArr, getCookieObj, sendPost, sendGet, sleep } = require('./utils')
-const { USER_AGENT, URL_HOSTNAME, URL_LOGIN, URL_BOOK_HOSTNAME, URL_BOOK_LIST_SECTION } = require('./constant')
+const { USER_AGENT, URL_HOSTNAME, URL_LOGIN, URL_BOOK_HOSTNAME, URL_BOOK_LIST_SECTION, URL_BOOK_SECTION } = require('./constant')
 
 class Juejin {
   constructor(email, password, bookID) {
@@ -12,6 +13,7 @@ class Juejin {
     this.src = 'web'
     this.userInfo = {}
     this.bookSectionList = []
+    this.count = 0
   }
 
   async mainPage() {
@@ -35,7 +37,7 @@ class Juejin {
     }
     const response = await sendPost(URL_HOSTNAME, URL_LOGIN, auth, headers)
     this.cookie = JSON.stringify(Object.assign(JSON.parse(this.cookie), getCookieObj(response.res.headers['set-cookie'])))
-    this.userInfo = JSON.parse(response.data.toString())
+    this.userInfo = JSON.parse(response.data)
     return response 
   }
 
@@ -46,8 +48,30 @@ class Juejin {
       'Connection': 'keep-alive'
     }
     const response = await sendGet(URL_BOOK_HOSTNAME, `${URL_BOOK_LIST_SECTION}?uid=${this.userInfo.userId}&client_id=${this.userInfo.user.clientId}&token=${this.userInfo.user.token}&src=${this.src}&id=${process.env.BOOK_ID}`, headers)
-    this.bookSectionList = JSON.parse(response.data.toString()).d
+    const data = response.data
+    this.bookSectionList = JSON.parse(data).d
     return response
+  }
+
+  async getContentHTML(callback) {
+    console.warn('===getting book HTML content')
+    const headers = {
+      'User-Agent': USER_AGENT,
+      'Connection': 'keep-alive'
+    }
+    await sleep()
+
+    const url = `${URL_BOOK_SECTION}?uid=${this.userInfo.userId}&client_id=${this.userInfo.clientId}&token=${this.userInfo.token}&src=${this.src}&sectionId=${this.bookSectionList[this.count].sectionId}`
+    const response = await sendGet(URL_BOOK_HOSTNAME, url, headers)
+    let data = JSON.parse(response.data)
+
+    console.log(data.d.title)
+    data.d.isFinished || console.log('写作中...')
+    callback(data.d.html)
+
+    this.count ++
+    let maxCount = this.bookSectionList.length
+    this.count !== maxCount && await this.getContentHTML(callback)
   }
 }
 
@@ -55,10 +79,10 @@ class Juejin {
   const juejin = new Juejin(process.env.USER_EMAIL, process.env.USER_PASSWD)
   try {
     await juejin.mainPage()
-    await sleep()
     await juejin.login()
     await sleep()
     await juejin.getTargetBookSectionList()
+    await juejin.getContentHTML()
   } catch (error) {
     console.log(error) 
   }

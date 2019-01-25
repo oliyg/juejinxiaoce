@@ -4,11 +4,13 @@ const URL_LOGIN = '/auth/type/email'
 
 const URL_BOOK_HOSTNAME = 'xiaoce-cache-api-ms.juejin.im'
 const URL_BOOK_LIST_SECTION = '/v1/getListSection'
+const URL_BOOK_SECTION = '/v1/getSection'
 
 module.exports = {
   USER_AGENT,
   URL_HOSTNAME,
   URL_LOGIN,
   URL_BOOK_HOSTNAME,
-  URL_BOOK_LIST_SECTION
+  URL_BOOK_LIST_SECTION,
+  URL_BOOK_SECTION
 }
