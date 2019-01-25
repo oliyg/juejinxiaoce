@@ -1,5 +1,13 @@
 const https = require('https')
 
+const sleep = async(wait = 1000) => {
+  return new Promise(res => {
+    setTimeout(() => {
+      res(1)
+    }, wait)
+  })
+}
+
 function sendGet(hostname, path, headers) {
   return new Promise((resolve, reject) => {
     const req = https.request({
@@ -72,5 +80,5 @@ function getCookieArr(cookie_obj) {
 }
 
 module.exports = {
-  setHeaders, getCookieObj, getCookieArr, sendPost, sendGet
+  setHeaders, getCookieObj, getCookieArr, sendPost, sendGet, sleep
 }
