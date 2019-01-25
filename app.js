@@ -31,8 +31,12 @@ class Juejin {
     }
     const response = await sendPost(URL_HOSTNAME, URL_LOGIN, auth, headers)
     this.cookie = JSON.stringify(Object.assign(JSON.parse(this.cookie), getCookieObj(response.res.headers['set-cookie'])))
-    console.log(this.cookie)
+    this.userInfo = JSON.parse(response.data.toString())
+    console.log(this.userInfo)
     return response 
+  }
+
+  async getTargetBookSectionList() {
   }
 }
 
@@ -40,7 +44,7 @@ class Juejin {
   const juejin = new Juejin(process.env.USER_EMAIL, process.env.USER_PASSWD)
   try {
     await juejin.mainPage()
-    await juejin.login().then(d => { console.log(d.data.toString())})
+    await juejin.login()
   } catch (error) {
     console.log(error) 
   }
