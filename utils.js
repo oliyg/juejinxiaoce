@@ -28,7 +28,10 @@ function sendPost(hostname, path, data, headers) {
     }, res => {
       const data = []
       res.on('data', chunk => { data.push(chunk) })
-      res.on('end', () => { resolve(data) })
+      res.on('end', () => { resolve({
+        res,
+        data
+      }) })
       res.on('error', reject)
     })
 
@@ -47,10 +50,27 @@ function setHeaders(req, obj) {
   }
 }
 
-function cookieToStr(cookieArray) {
-  return cookieArray.map(elem => elem.match(/(.+); path/)[1])
+function getCookieObj(cookie_arr) {
+  cookie_arr = cookie_arr.map(item => item.split('; path=')[0])
+  cookie_arr = cookie_arr.map(item => item.split('='))
+  let result = {}
+  cookie_arr.forEach(item => {
+    result[item[0]] = item[1]
+  })
+  return result
+}
+
+function getCookieArr(cookie_obj) {
+  const result = []
+  for (const key in cookie_obj) {
+    if (cookie_obj.hasOwnProperty(key)) {
+      const value = cookie_obj[key]
+      result.push(key + '=' + value)
+    }
+  }
+  return result
 }
 
 module.exports = {
-  setHeaders, cookieToStr, sendPost, sendGet
+  setHeaders, getCookieObj, getCookieArr, sendPost, sendGet
 }

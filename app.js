@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 require('dotenv').config()
-const { cookieToStr, sendPost, sendGet } = require('./utils')
+const { getCookieArr, getCookieObj, sendPost, sendGet } = require('./utils')
 const { USER_AGENT, URL_HOSTNAME, URL_LOGIN } = require('./constant')
 
 class Juejin {
@@ -8,7 +8,8 @@ class Juejin {
     this.email = email 
     this.password = password
     this.bookID = bookID
-    this.cookie = []
+    this.cookie = ''
+    this.userInfo = {}
   }
 
   async mainPage() {
@@ -17,7 +18,7 @@ class Juejin {
       'Connection': 'keep-alive'
     }
     const response = await sendGet(URL_HOSTNAME, '/', headers)
-    this.cookie = this.cookie.concat(response.headers['set-cookie'])
+    this.cookie = JSON.stringify(getCookieObj(response.headers['set-cookie']))
   }
 
   async login() {
@@ -26,9 +27,12 @@ class Juejin {
       'User-Agent': USER_AGENT,
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(auth),
-      'Cookie': cookieToStr(this.cookie)
+      'Cookie': getCookieArr(JSON.parse(this.cookie))
     }
-    return await sendPost(URL_HOSTNAME, URL_LOGIN, auth, headers)
+    const response = await sendPost(URL_HOSTNAME, URL_LOGIN, auth, headers)
+    this.cookie = JSON.stringify(Object.assign(JSON.parse(this.cookie), getCookieObj(response.res.headers['set-cookie'])))
+    console.log(this.cookie)
+    return response 
   }
 }
 
@@ -36,7 +40,7 @@ class Juejin {
   const juejin = new Juejin(process.env.USER_EMAIL, process.env.USER_PASSWD)
   try {
     await juejin.mainPage()
-    await juejin.login().then(d => { console.log(d.toString())})
+    await juejin.login().then(d => { console.log(d.data.toString())})
   } catch (error) {
     console.log(error) 
   }
