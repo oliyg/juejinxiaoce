@@ -2,6 +2,7 @@
 require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
+const os = require('os')
 const Turndown = require('turndown')
 
 const { getCookieArr, getCookieObj, sendPost, sendGet, sleep } = require('./utils')
@@ -74,23 +75,23 @@ class Juejin {
 
     this.count ++
     let maxCount = this.bookSectionList.length
-    this.count !== maxCount && await this.getContentHTML(callback)
+    this.count < maxCount && await this.getContentHTML(callback)
   }
 
   saveHTML(d) {
     return new Promise((resolve, reject) => {
-      console.log('===writing file...')
+      console.log('===writing html...')
       const title = d.title.replace(/[/?*:|\\<>]/g, ' ')
       const output = path.resolve(__dirname, 'dist', 'html', title + '.html')
       fs.writeFile(output, d.html, { encoding: 'utf-8' }, err => {
         err && reject(err)
-        console.log('===write file success')
-        resolve(output)
+        console.log('===write html file success')
+        resolve({title, output})
       })
     })
   }
 
-  toMarkdown(path) {
+  toMarkdown(title, path) {
     return new Promise((resolve, reject) => {
       const turndownService = new Turndown({
         headingStyle: 'atx',
@@ -98,10 +99,22 @@ class Juejin {
       })
       try {
         const markdown = turndownService.turndown(fs.readFileSync(path, { encoding: 'utf-8' }))
-        resolve(markdown) 
+        resolve({ title, markdown }) 
       } catch (error) {
         reject(error)
       }
+    })
+  }
+
+  saveMD(title, data) {
+    return new Promise((resolve, reject) => {
+      console.log('===writing markdown...')
+      const output = path.resolve(__dirname, 'dist', 'md', title + '.md')
+      fs.writeFile(output, data, { encoding: 'utf-8' }, err => {
+        err && reject(err)
+        console.log('===write markdown file success')
+        resolve()
+      })
     })
   }
 
@@ -111,14 +124,20 @@ class Juejin {
   const juejin = new Juejin(process.env.USER_EMAIL, process.env.USER_PASSWD)
   try {
     await juejin.mainPage()
+    await sleep()
     await juejin.login()
     await sleep()
     await juejin.getTargetBookSectionList()
     await juejin.getContentHTML(async d => {
-      const path = await juejin.saveHTML(d)
-      const md = await juejin.toMarkdown(path)
-      console.log(md.length)
+      const { title, output } = await juejin.saveHTML(d)
+      const { title: mdTitle, markdown: markdownData } = await juejin.toMarkdown(title, output)
+      await juejin.saveMD(mdTitle, markdownData)
     })
+
+    setTimeout(() => {
+      console.log(`${os.EOL}======${os.EOL}All Done...Enjoy.${os.EOL}======${os.EOL}`)
+    }, 200)
+
   } catch (error) {
     console.log(error) 
   }
