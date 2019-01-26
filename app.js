@@ -1,23 +1,47 @@
 /* eslint-disable no-console */
-require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
+const readline = require('readline')
 const Turndown = require('turndown')
 
 const { getCookieArr, getCookieObj, sendPost, sendGet, sleep } = require('./utils')
 const { USER_AGENT, URL_HOSTNAME, URL_LOGIN, URL_BOOK_HOSTNAME, URL_BOOK_LIST_SECTION, URL_BOOK_SECTION } = require('./constant')
 
 class Juejin {
-  constructor(email, password, bookID) {
-    this.email = email 
-    this.password = password
-    this.bookID = bookID
+  constructor() {
+    this.email = ''
+    this.password = ''
+    this.bookID = ''
     this.cookie = ''
     this.src = 'web'
     this.userInfo = {}
     this.bookSectionList = []
     this.count = 0
+  }
+
+  async getMetaData() {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    })
+
+    const question = query => {
+      return new Promise(resolve => {
+        rl.question(query, resolve)
+      })
+    }
+
+    const email = await question('email: ')
+    const password = await question('password: ')
+    const bookID = await question('bookId: ')
+
+    rl.close()
+    this.email = email
+    this.password = password
+    this.bookID = bookID
+
+    Promise.resolve()
   }
 
   async mainPage() {
@@ -51,7 +75,7 @@ class Juejin {
       'User-Agent': USER_AGENT,
       'Connection': 'keep-alive'
     }
-    const response = await sendGet(URL_BOOK_HOSTNAME, `${URL_BOOK_LIST_SECTION}?uid=${this.userInfo.userId}&client_id=${this.userInfo.user.clientId}&token=${this.userInfo.user.token}&src=${this.src}&id=${process.env.BOOK_ID}`, headers)
+    const response = await sendGet(URL_BOOK_HOSTNAME, `${URL_BOOK_LIST_SECTION}?uid=${this.userInfo.userId}&client_id=${this.userInfo.user.clientId}&token=${this.userInfo.user.token}&src=${this.src}&id=${this.bookID}`, headers)
     const data = response.data
     this.bookSectionList = JSON.parse(data).d
     return response
@@ -121,8 +145,9 @@ class Juejin {
 }
 
 {(async () => {
-  const juejin = new Juejin(process.env.USER_EMAIL, process.env.USER_PASSWD)
+  const juejin = new Juejin()
   try {
+    await juejin.getMetaData()
     await juejin.mainPage()
     await sleep()
     await juejin.login()
