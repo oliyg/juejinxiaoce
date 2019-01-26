@@ -17,7 +17,7 @@ class Juejin {
     this.src = 'web'
     this.userInfo = {}
     this.bookSectionList = []
-    this.count = 34
+    this.count = 0
     this.pwd = process.env.PWD
   }
 

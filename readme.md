@@ -1,6 +1,7 @@
 - [🔥 掘金小册 markdown 转换器](#%F0%9F%94%A5-%E6%8E%98%E9%87%91%E5%B0%8F%E5%86%8C-markdown-%E8%BD%AC%E6%8D%A2%E5%99%A8)
-  - [安装方式](#%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F)
   - [使用方法](#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95)
+    - [方法一：npx 直接执行](#%E6%96%B9%E6%B3%95%E4%B8%80npx-%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8C)
+    - [方法二：npm i 命令](#%E6%96%B9%E6%B3%95%E4%BA%8Cnpm-i-%E5%91%BD%E4%BB%A4)
   - [更新日志](#%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97)
   - [常见问题](#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
   - [免责](#%E5%85%8D%E8%B4%A3)
@@ -11,32 +12,89 @@
 
 ![20190121001820.png](https://i.loli.net/2019/01/21/5c449f4dbc3d5.png)
 
+[github 仓库欢迎 star](https://github.com/oliyg/juejinxiaoce)
+
 采用 node https 模块，获取已购买小册 html 代码，并将 html 代码转换为 markdown 格式文件保存本地。
 
 **注意：目前本项目有两个版本，v2 不需要使用 chromium 作为无头浏览器；v1 则使用 chromi 作为无头浏览器模拟用户登录网站；**
 
-根据需要选择不同版本，v1 不再维护：
+根据需要选择不同版本
 
-- [release v2](https://github.com/oliyg/juejinxiaoce/releases/tag/v2.0.0)
-- [release v1](https://github.com/oliyg/juejinxiaoce/releases/tag/1.1.2)
-
-## 安装方式
-
-`npm i @oliyg/juejinxiaoce`
-
-> 推荐使用 nrm 管理镜像源，使用淘宝镜像：`nrm use taobao`
+- v2：
+  - [latest](https://github.com/oliyg/juejinxiaoce/releases)
+- v1 不再维护：
+  - [release v1](https://github.com/oliyg/juejinxiaoce/releases/tag/1.1.2)
 
 ## 使用方法
 
-新建 .env 文件到根目录，并根据 .env.example 填写掘金登录用户名和密码以及要爬取的小册ID：
+**⚠️ 注意：掘金不支持境外网络访问，因此不要使用代理**
 
-![20190120235150.png](https://i.loli.net/2019/01/20/5c4499178bb83.png)
+### 方法一：npx 直接执行
+
+在本地某目录中执行 `npx @oliyg/juejinxiaoce` 按照提示输入用户名密码以及小册 ID 当提示 all done 完成
+
+```
+➜  Desktop npx @oliyg/juejinxiaoce
+npx: 98 安装成功，用时 10.748 秒
+email: 输入你的用户名密码
+password: 输入你的用户名密码
+bookId: 小册 ID
+===navagating to main page
+===login...
+===getting book section list
+===getting book HTML content
+面试常用技巧
+===writing html...
+===getting book HTML content
+===write html file success
+===writing markdown...
+===write markdown file success
+前方的路，让我们结伴同行
+===writing html...
+===write html file success
+===writing markdown...
+===write markdown file success
+
+======
+All Done...Enjoy.
+======
+```
+
+在执行命令的这个目录中可以找到一个名为 md xxx 的文件夹，内包含 md 文档；在上面这个例子中，我们在 Desktop 桌面目录执行命令，因此在桌面目录中会生成这个文件夹：
+
+```shell
+➜  md 1548483715543 ls -al
+total 40
+drwxr-xr-x  4 oli  staff   128  1 26 14:22 .
+drwx------+ 9 oli  staff   288  1 26 14:21 ..
+-rw-r--r--  1 oli  staff  4915  1 26 14:21 面试常用技巧.md
+-rw-r--r--  1 oli  staff  8465  1 26 14:22 前方的路，让我们结伴同行.md
+```
+
+### 方法二：npm i 命令
+
+使用 `npm i -g` 安装，并使用 `juejinxiaoce` 命令执行：
+
+```
+➜  Desktop npm i -g @oliyg/juejinxiaoce
+/Users/oli/.nvm/versions/node/v8.12.0/bin/juejinxiaoce -> /Users/oli/.nvm/versions/node/v8.12.0/lib/node_modules/@oliyg/juejinxiaoce/bin/juejinxiaoce
++ @oliyg/juejinxiaoce@2.2.1
+added 98 packages from 201 contributors in 5.89s
+➜  Desktop juejinxiaoce
+email:
+password:
+bookId:
+===navagating to main page
+===login...
+...
+...
+```
 
 > 小册ID见 URL 链接：
 > 
 > ![20190120235353.png](https://i.loli.net/2019/01/20/5c4499929e48e.png)
 
-.env 文件修改完毕后执行 npm start 等待出现消息 `all done. enjoy.` 完成转换，效果如下：
+执行后等待出现消息 `all done. enjoy.` 完成转换，效果如下：
 
 ![20190121000703.png](https://i.loli.net/2019/01/21/5c449ca8d869e.png)
 
@@ -44,6 +102,7 @@
 
 ## 更新日志
 
+- v2.2.0 增加命令行模式
 - v2.0.0 使用 node 原生 https 模块，发送请求数据获取内容，不需要安装 chromium，没有软件权限问题
 - v1.1.2 使用谷歌 puppeteer 作为无头浏览器获取内容，需要安装 chromium，macOS 中可能有权限问题
 
