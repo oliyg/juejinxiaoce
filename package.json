@@ -1,6 +1,6 @@
 {
-  "name": "juejinxiaoce",
-  "version": "1.0.0",
+  "name": "@oliyg/juejinxiaoce",
+  "version": "2.0.1",
   "description": "",
   "main": "app.js",
   "scripts": {

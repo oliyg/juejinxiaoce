@@ -22,13 +22,7 @@
 
 ## 安装方式
 
-首先 clone 此项目：
-
-`git clone https://github.com/oliyg/juejinxiaoce.git`
-
-然后安装依赖：
-
-`npm i`
+`npm i @oliyg/juejinxiaoce`
 
 > 推荐使用 nrm 管理镜像源，使用淘宝镜像：`nrm use taobao`
 
