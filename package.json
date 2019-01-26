@@ -11,6 +11,9 @@
     "url": "git+https://github.com/oliyg/juejinxiaoce.git"
   },
   "keywords": [],
+  "bin": {
+    "juejinxiaoce": "bin/juejinxiaoce"
+  },
   "author": "OliverYoung <billyangg@qq.com>",
   "license": "MIT",
   "bugs": {
