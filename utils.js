@@ -1,4 +1,20 @@
 const https = require('https')
+const fs = require('fs')
+const path = require('path')
+const process = require('process')
+
+const mkdir = dirname => {
+  const outputdir = path.resolve(process.env.PWD, dirname)
+  fs.existsSync(outputdir) || fs.mkdirSync(outputdir)
+}
+
+const rmfile = ext => {
+  const outputdir = path.resolve(__dirname, 'dist', ext)
+  const fileList = fs.readdirSync(outputdir).filter(item => path.extname(item) === '.' + ext)
+  fileList.forEach(file => {
+    fs.unlinkSync(path.join(outputdir, file))   
+  })
+}
 
 const sleep = async(wait = 1000) => {
   return new Promise(res => {
@@ -80,5 +96,5 @@ function getCookieArr(cookie_obj) {
 }
 
 module.exports = {
-  setHeaders, getCookieObj, getCookieArr, sendPost, sendGet, sleep
+  setHeaders, getCookieObj, getCookieArr, sendPost, sendGet, sleep, rmfile, mkdir
 }

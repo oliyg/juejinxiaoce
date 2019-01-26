@@ -5,7 +5,7 @@ const os = require('os')
 const readline = require('readline')
 const Turndown = require('turndown')
 
-const { getCookieArr, getCookieObj, sendPost, sendGet, sleep } = require('./utils')
+const { getCookieArr, getCookieObj, sendPost, sendGet, sleep, rmfile, mkdir } = require('./utils')
 const { USER_AGENT, URL_HOSTNAME, URL_LOGIN, URL_BOOK_HOSTNAME, URL_BOOK_LIST_SECTION, URL_BOOK_SECTION } = require('./constant')
 
 class Juejin {
@@ -17,7 +17,19 @@ class Juejin {
     this.src = 'web'
     this.userInfo = {}
     this.bookSectionList = []
-    this.count = 0
+    this.count = 34
+    this.pwd = process.env.PWD
+  }
+
+  copyToPWDDir(dirname) {
+    mkdir(dirname)
+
+    const output = path.resolve(__dirname, 'dist', 'md')
+    
+    const fileList = fs.readdirSync(output).filter(item => path.extname(item) === '.md')
+    fileList.forEach(file => {
+      fs.copyFileSync(path.join(output, file), path.resolve(process.env.PWD, dirname, file))   
+    })
   }
 
   async getMetaData() {
@@ -145,6 +157,8 @@ class Juejin {
 }
 
 {(async () => {
+  rmfile('html')
+  rmfile('md')
   const juejin = new Juejin()
   try {
     await juejin.getMetaData()
@@ -153,10 +167,14 @@ class Juejin {
     await juejin.login()
     await sleep()
     await juejin.getTargetBookSectionList()
+
+    const dirname = 'md ' + + new Date()
+
     await juejin.getContentHTML(async d => {
       const { title, output } = await juejin.saveHTML(d)
       const { title: mdTitle, markdown: markdownData } = await juejin.toMarkdown(title, output)
       await juejin.saveMD(mdTitle, markdownData)
+      juejin.copyToPWDDir(dirname)
     })
 
     setTimeout(() => {
