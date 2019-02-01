@@ -1,20 +1,8 @@
-- [🔥 掘金小册 markdown 转换器](#%F0%9F%94%A5-%E6%8E%98%E9%87%91%E5%B0%8F%E5%86%8C-markdown-%E8%BD%AC%E6%8D%A2%E5%99%A8)
-  - [使用方法](#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95)
-    - [方法一：npx 直接执行](#%E6%96%B9%E6%B3%95%E4%B8%80npx-%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8C)
-    - [方法二：npm i 命令](#%E6%96%B9%E6%B3%95%E4%BA%8Cnpm-i-%E5%91%BD%E4%BB%A4)
-  - [更新日志](#%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97)
-  - [常见问题](#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
-  - [免责](#%E5%85%8D%E8%B4%A3)
-  - [隐私](#%E9%9A%90%E7%A7%81)
-  - [License](#license)
-
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce?ref=badge_large)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce?ref=badge_shield)
 
 # 🔥 掘金小册 markdown 转换器
 
 ![20190121001820.png](https://i.loli.net/2019/01/21/5c449f4dbc3d5.png)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce?ref=badge_shield)
 
 [github 仓库欢迎 star](https://github.com/oliyg/juejinxiaoce)
 
@@ -148,3 +136,5 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
 DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 OR OTHER DEALINGS IN THE SOFTWARE.
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce?ref=badge_large)
