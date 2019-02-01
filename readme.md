@@ -8,9 +8,13 @@
   - [隐私](#%E9%9A%90%E7%A7%81)
   - [License](#license)
 
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce?ref=badge_large)
+
 # 🔥 掘金小册 markdown 转换器
 
 ![20190121001820.png](https://i.loli.net/2019/01/21/5c449f4dbc3d5.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce?ref=badge_shield)
 
 [github 仓库欢迎 star](https://github.com/oliyg/juejinxiaoce)
 
