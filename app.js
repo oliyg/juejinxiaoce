@@ -6,11 +6,12 @@ const readline = require('readline')
 const Turndown = require('turndown')
 
 const { getCookieArr, getCookieObj, sendPost, sendGet, sleep, rmfile, mkdir } = require('./utils')
-const { USER_AGENT, URL_HOSTNAME, URL_LOGIN, URL_BOOK_HOSTNAME, URL_BOOK_LIST_SECTION, URL_BOOK_SECTION } = require('./constant')
+const { USER_AGENT, URL_HOSTNAME, URL_LOGIN_EMAIL, URL_LOGIN_PHONENUMBER, URL_BOOK_HOSTNAME, URL_BOOK_LIST_SECTION, URL_BOOK_SECTION } = require('./constant')
 
 class Juejin {
   constructor() {
-    this.email = ''
+    this.loginType = '0' // 0为邮箱 1为手机
+    this.account = ''
     this.password = ''
     this.bookID = ''
     this.cookie = ''
@@ -43,13 +44,15 @@ class Juejin {
         rl.question(query, resolve)
       })
     }
-
-    const email = await question('email: ')
+    console.warn('loginType 0：邮箱 1：手机号码')
+    const loginType = await question('loginType: ')
+    const account = await question('account: ')
     const password = await question('password: ')
     const bookID = await question('bookId: ')
 
     rl.close()
-    this.email = email
+    this.loginType = loginType
+    this.account = account
     this.password = password
     this.bookID = bookID
 
@@ -68,14 +71,30 @@ class Juejin {
 
   async login() {
     console.warn('===login...')
-    const auth = JSON.stringify({ email: this.email, password: this.password })
+    const authObj = {
+      password: this.password
+    }
+    let loginUrl;
+
+    if(this.loginType === '0'){
+      Object.assign(authObj,{
+        email: this.account
+      })
+      loginUrl = URL_LOGIN_EMAIL;
+    }else{
+      Object.assign(authObj,{
+        phoneNumber: this.account
+      })
+      loginUrl = URL_LOGIN_PHONENUMBER;
+    }
+    const auth = JSON.stringify(authObj)
     const headers = {
       'User-Agent': USER_AGENT,
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(auth),
       'Cookie': getCookieArr(JSON.parse(this.cookie))
     }
-    const response = await sendPost(URL_HOSTNAME, URL_LOGIN, auth, headers)
+    const response = await sendPost(URL_HOSTNAME, loginUrl, auth, headers)
     this.cookie = JSON.stringify(Object.assign(JSON.parse(this.cookie), getCookieObj(response.res.headers['set-cookie'])))
     this.userInfo = JSON.parse(response.data)
     return response 
