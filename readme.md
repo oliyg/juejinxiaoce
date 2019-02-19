@@ -104,6 +104,10 @@ bookId:
   - 报错：spawn EACCES
     - 常见于 macOS，请保证 chromium 已被正常安装
 
+## 开源贡献
+
+- 感谢 `@yangchendoit` 提交的 pr 完善手机号码登录功能
+
 ## 免责
 
 - 不提供用户名和密码，需使用用户自己的账号密码登录
