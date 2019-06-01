@@ -74,18 +74,18 @@ class Juejin {
     const authObj = {
       password: this.password
     }
-    let loginUrl;
+    let loginUrl
 
     if(this.loginType === '0'){
       Object.assign(authObj,{
         email: this.account
       })
-      loginUrl = URL_LOGIN_EMAIL;
+      loginUrl = URL_LOGIN_EMAIL
     }else{
       Object.assign(authObj,{
         phoneNumber: this.account
       })
-      loginUrl = URL_LOGIN_PHONENUMBER;
+      loginUrl = URL_LOGIN_PHONENUMBER
     }
     const auth = JSON.stringify(authObj)
     const headers = {
