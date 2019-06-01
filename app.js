@@ -33,6 +33,9 @@ class Juejin {
     })
   }
 
+  /**
+   * 获取用户信息和需要导出的小册信息
+   */
   async getMetaData() {
     const rl = readline.createInterface({
       input: process.stdin,
@@ -59,6 +62,9 @@ class Juejin {
     Promise.resolve()
   }
 
+  /**
+   * 请求掘金的首页，获取需要的Cookie信息
+   */
   async mainPage() {
     console.warn('===navagating to main page')
     const headers = {
@@ -69,6 +75,10 @@ class Juejin {
     this.cookie = JSON.stringify(getCookieObj(response.headers['set-cookie']))
   }
 
+  /**
+   * 登录 掘金，获取用户登录后的Cookie和用户基本细腻
+   * @returns {Object} response 响应体
+   */
   async login() {
     console.warn('===login...')
     const authObj = {
@@ -99,7 +109,9 @@ class Juejin {
     this.userInfo = JSON.parse(response.data)
     return response 
   }
-
+  /**
+   * 获取小册的章节信息
+   */
   async getTargetBookSectionList() {
     console.warn('===getting book section list')
     const headers = {
@@ -112,6 +124,9 @@ class Juejin {
     return response
   }
 
+  /**
+   * 根据小册章节ID 获取具体的HTML内容
+   */
   async getContentHTML(callback) {
     console.warn('===getting book HTML content')
     const headers = {
@@ -174,7 +189,7 @@ class Juejin {
   }
 
 }
-
+// 入口执行方法
 {(async () => {
   rmfile('html')
   rmfile('md')
