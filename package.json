@@ -24,6 +24,7 @@
     "eslint": "^5.12.1"
   },
   "dependencies": {
-    "turndown": "^5.0.3"
+    "turndown": "^5.0.3",
+    "puppeteer": "^1.17.0"
   }
 }

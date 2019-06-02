@@ -4,6 +4,8 @@ const path = require('path')
 const os = require('os')
 const readline = require('readline')
 const Turndown = require('turndown')
+const puppeteer = require('puppeteer')
+process.env.PWD = __dirname
 
 const { getCookieArr, getCookieObj, sendPost, sendGet, sleep, rmfile, mkdir } = require('./utils')
 const { USER_AGENT, URL_HOSTNAME, URL_LOGIN_EMAIL, URL_LOGIN_PHONENUMBER, URL_BOOK_HOSTNAME, URL_BOOK_LIST_SECTION, URL_BOOK_SECTION } = require('./constant')
@@ -20,14 +22,22 @@ class Juejin {
     this.bookSectionList = []
     this.count = 0
     this.pwd = process.env.PWD
+    this.browser = null
+    this.page = null
   }
 
-  copyToPWDDir(dirname) {
+  /**
+   * 复制 dist 指定子 文件夹下的 指定扩展 文件到指定目录下
+   * @param {String} dirname 指定的输出文件夹
+   * @param {String} subDir 复制指定文件夹下的文件
+   * @param {String} ext 文件扩展
+   */
+  copyToPWDDir(dirname, subDir = 'pdf', ext = 'pdf') {
     mkdir(dirname)
 
-    const output = path.resolve(__dirname, 'dist', 'md')
+    const output = path.resolve(__dirname, 'dist', subDir)
     
-    const fileList = fs.readdirSync(output).filter(item => path.extname(item) === '.md')
+    const fileList = fs.readdirSync(output).filter(item => path.extname(item) === `.${ext}`)
     fileList.forEach(file => {
       fs.copyFileSync(path.join(output, file), path.resolve(process.env.PWD, dirname, file))   
     })
@@ -58,7 +68,7 @@ class Juejin {
     this.account = account
     this.password = password
     this.bookID = bookID
-
+    
     Promise.resolve()
   }
 
@@ -105,9 +115,12 @@ class Juejin {
       'Cookie': getCookieArr(JSON.parse(this.cookie))
     }
     const response = await sendPost(URL_HOSTNAME, loginUrl, auth, headers)
+    if (!response.data) {
+      throw '用户名或者密码错误'
+    }
     this.cookie = JSON.stringify(Object.assign(JSON.parse(this.cookie), getCookieObj(response.res.headers['set-cookie'])))
     this.userInfo = JSON.parse(response.data)
-    return response 
+    return response
   }
   /**
    * 获取小册的章节信息
@@ -141,13 +154,19 @@ class Juejin {
 
     console.log(data.d.title)
     data.d.isFinished || console.log('写作中...')
-    callback(data.d)
+    await callback(data.d)
 
     this.count ++
     let maxCount = this.bookSectionList.length
     this.count < maxCount && await this.getContentHTML(callback)
   }
 
+  /**
+   * 写入文章内容 到 HTML文件中
+   * @param {Object} d 文章内容对象
+   * { title: '' , html : '' }
+   * @requires {title: '文章标题' , output: '生成的HTML路径'}
+   */
   saveHTML(d) {
     return new Promise((resolve, reject) => {
       console.log('===writing html...')
@@ -188,13 +207,40 @@ class Juejin {
     })
   }
 
+  /**
+   * 保存文件为 PDF
+   * @param {String} title 文章标题
+   * @param {String} htmlPath 生产html的路径
+   */
+  savePDF(title, htmlPath) {
+    return new Promise((resolve, reject) => {
+      console.log('===writing pdf...')
+      const output = path.resolve(__dirname, 'dist', 'pdf', title + '.pdf')
+      this.page.goto(`file://${htmlPath}`).then(() => {
+        this.page.pdf({
+          path: output
+        }).then(() => {
+          console.log('===write pdf file success')
+          resolve()
+        })
+      }).catch ((err) => {
+        reject(err)
+      })
+    })
+  }
+
 }
 // 入口执行方法
 {(async () => {
   rmfile('html')
   rmfile('md')
+  rmfile('pdf')
   const juejin = new Juejin()
   try {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+    juejin.browser = browser
+    juejin.page = page
     await juejin.getMetaData()
     await juejin.mainPage()
     await sleep()
@@ -202,13 +248,15 @@ class Juejin {
     await sleep()
     await juejin.getTargetBookSectionList()
 
-    const dirname = 'md ' + + new Date()
+    const dirname = 'juejin-' + juejin.bookID
 
     await juejin.getContentHTML(async d => {
       const { title, output } = await juejin.saveHTML(d)
       const { title: mdTitle, markdown: markdownData } = await juejin.toMarkdown(title, output)
       await juejin.saveMD(mdTitle, markdownData)
-      juejin.copyToPWDDir(dirname)
+      await juejin.savePDF(title, output)
+      juejin.copyToPWDDir(dirname, 'pdf', 'pdf')
+      return
     })
 
     setTimeout(() => {
@@ -217,5 +265,9 @@ class Juejin {
 
   } catch (error) {
     console.log(error) 
+  } finally {
+    // 释放无头浏览器的资源
+    juejin.page && await juejin.page.close()
+    juejin.browser && await juejin.browser.close()
   }
 })()} 
