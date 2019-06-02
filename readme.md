@@ -1,12 +1,12 @@
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Foliyg%2Fjuejinxiaoce?ref=badge_shield)
 
-# 🔥 掘金小册 markdown 转换器
+# 🔥 掘金小册 markdown, pdf 转换器
 
 ![20190121001820.png](https://i.loli.net/2019/01/21/5c449f4dbc3d5.png)
 
 [github 仓库欢迎 star](https://github.com/oliyg/juejinxiaoce)
 
-采用 node https 模块，获取已购买小册 html 代码，并将 html 代码转换为 markdown 格式文件保存本地。
+采用 node https 模块，获取已购买小册 html 代码，并将 html 代码转换为 markdown 和 pdf 格式文件保存本地。
 
 **注意：目前本项目有两个版本，v2 不需要使用 chromium 作为无头浏览器；v1 则使用 chromi 作为无头浏览器模拟用户登录网站；**
 
@@ -52,10 +52,10 @@ All Done...Enjoy.
 ======
 ```
 
-在执行命令的这个目录中可以找到一个名为 md xxx 的文件夹，内包含 md 文档；在上面这个例子中，我们在 Desktop 桌面目录执行命令，因此在桌面目录中会生成这个文件夹：
+在执行命令的这个目录中可以找到一个名为 juejin-${bookID} 的文件夹，内包含 pdf 文档；在上面这个例子中，我们在 Desktop 桌面目录执行命令，因此在桌面目录中会生成这个文件夹：
 
 ```shell
-➜  md 1548483715543 ls -al
+➜  juejin-5c90640c5188252d7941f5bb ls -al
 total 40
 drwxr-xr-x  4 oli  staff   128  1 26 14:22 .
 drwx------+ 9 oli  staff   288  1 26 14:21 ..
@@ -94,6 +94,7 @@ bookId:
 
 ## 更新日志
 
+- v2.3.0 增加导出 pdf 格式
 - v2.2.0 增加命令行模式
 - v2.0.0 使用 node 原生 https 模块，发送请求数据获取内容，不需要安装 chromium，没有软件权限问题
 - v1.1.2 使用谷歌 puppeteer 作为无头浏览器获取内容，需要安装 chromium，macOS 中可能有权限问题
