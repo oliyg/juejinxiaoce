@@ -79,9 +79,9 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-
-
-
 # dist
 dist/html/*.html
 dist/md/*.md
+
+# vscode
+.vscode
