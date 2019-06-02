@@ -7,7 +7,10 @@ const mkdir = dirname => {
   const outputdir = path.resolve(process.env.PWD, dirname)
   fs.existsSync(outputdir) || fs.mkdirSync(outputdir)
 }
-
+/**
+ * 删除 dist 文件夹下 指定后缀名的 文件
+ * @param {String} ext 后缀名
+ */
 const rmfile = ext => {
   const outputdir = path.resolve(__dirname, 'dist', ext)
   const fileList = fs.readdirSync(outputdir).filter(item => path.extname(item) === '.' + ext)
