@@ -124,7 +124,7 @@ class Juejin {
     const response = await sendGet(URL_BOOK_HOSTNAME, url, headers)
     let data = JSON.parse(response.data)
 
-    console.log(data.d.title)
+    console.log(`${this.count + 1}.${data.d.title}`)
     data.d.isFinished || console.log('写作中...')
     callback(data.d)
 
@@ -164,7 +164,7 @@ class Juejin {
   saveMD(title, data) {
     return new Promise((resolve, reject) => {
       console.log('===writing markdown...')
-      const output = path.resolve(__dirname, 'dist', 'md', title + '.md')
+      const output = path.resolve(__dirname, 'dist', 'md', `${this.count}.${title}.md`)
       fs.writeFile(output, data, { encoding: 'utf-8' }, err => {
         err && reject(err)
         console.log('===write markdown file success')
